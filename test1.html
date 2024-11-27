@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="app">
+        <input type="text" v-model="num">
+        <button v-on:click="num++">赞同</button>
+        <button v-on:click="cancel">取消</button>
+        <h1>{{name}},有{{num}}人认为他非常帅</h1>
+    </div>
+
+    <script src="./node_modules/Vue/dist/Vue.js"></script>
+
+    <script>
+        //1.vue声明式渲染
+        let vm = new Vue({
+            el: '#app', //element管控哪个元素
+            data: {
+                name: '张三',
+                //双向绑定：上方输入框
+                num: 1
+            },
+            methods: {
+                cancel() {
+                    this.num--;
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>
