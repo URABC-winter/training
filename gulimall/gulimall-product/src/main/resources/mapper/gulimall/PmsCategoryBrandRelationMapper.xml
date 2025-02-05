@@ -28,7 +28,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     
     <select id="selectPmsCategoryBrandRelationById" parameterType="Long" resultMap="PmsCategoryBrandRelationResult">
         <include refid="selectPmsCategoryBrandRelationVo"/>
-        where id = #{id}
+        where brand_id = #{brandId}
     </select>
 
     <insert id="insertPmsCategoryBrandRelation" parameterType="PmsCategoryBrandRelation" useGeneratedKeys="true" keyProperty="id">

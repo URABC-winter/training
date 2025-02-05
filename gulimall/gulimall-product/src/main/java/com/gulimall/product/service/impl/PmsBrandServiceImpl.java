@@ -1,6 +1,9 @@
 package com.gulimall.product.service.impl;
 
 import java.util.List;
+
+import com.gulimall.common.utils.StringUtils;
+import com.gulimall.product.service.IPmsCategoryBrandRelationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.gulimall.product.mapper.PmsBrandMapper;
@@ -18,6 +21,9 @@ public class PmsBrandServiceImpl implements IPmsBrandService
 {
     @Autowired
     private PmsBrandMapper pmsBrandMapper;
+
+    @Autowired
+    private IPmsCategoryBrandRelationService pmsCategoryBrandRelationService;
 
     /**
      * 查询品牌
@@ -64,6 +70,9 @@ public class PmsBrandServiceImpl implements IPmsBrandService
     @Override
     public int updatePmsBrand(PmsBrand pmsBrand)
     {
+        if (!StringUtils.isEmpty(pmsBrand.getName())) {
+            pmsCategoryBrandRelationService.updateBrand(pmsBrand.getBrandId(), pmsBrand.getName());
+        }
         return pmsBrandMapper.updatePmsBrand(pmsBrand);
     }
 

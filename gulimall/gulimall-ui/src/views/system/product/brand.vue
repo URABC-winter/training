@@ -97,7 +97,7 @@
         <el-table-column label="排序" align="center" prop="sort" />
         <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
           <template slot-scope="scope">
-            <el-button size="mini" type="text" icon="el-icon-view" @click="handleRelation(scope.row)">关联分类</el-button>
+            <el-button size="mini" type="text" icon="el-icon-view" @click="handleRelation(scope.row.brandId)">关联分类</el-button>
             <el-button size="mini" type="text" icon="el-icon-edit" @click="handleUpdate(scope.row)" v-hasPermi="['system:brand:edit']">修改</el-button>
             <el-button size="mini" type="text" icon="el-icon-delete" @click="handleDelete(scope.row)" v-hasPermi="['system:brand:remove']">删除</el-button>
           </template>
@@ -169,12 +169,13 @@
           <el-button @click="cateRelationDialogVisible = false">取 消</el-button>
           <el-button type="primary" @click="cateRelationDialogVisible = false">确 定</el-button>
         </span>
-        </el-dialog>
+      </el-dialog>
     </div>
   </template>
   
   <script>
   import { listBrand, getBrand, delBrand, addBrand, updateBrand } from "@/api/system/brand";
+  import {listBrandRelation, addBrandRelation, deleteBrandRelation } from "@/api/system/brandRelation";
   import singleUpload from '../../../components/FileUpload/singleUpload.vue';
   import CategoryCascader from '../../../components/Product/category-cascader.vue';
   export default {
@@ -221,6 +222,12 @@
           firstLetter: "",
           sort: 0
         },
+        brandRelationForm: {
+          brandId: 0,
+          brandName: "",
+          catelogId: 0,
+          catelogName: ""
+        },
         // 表单校验
         rules: {
           name : [{ required: true, message: "品牌名不能为空", trigger: "blur" }],
@@ -252,6 +259,7 @@
               trigger: "blur"
           }]
         },
+        brandId: null,
         catelogPath: [],
         cateRelationTableData: [],
         catelogDialogVisible: false,
@@ -322,8 +330,11 @@
         this.title = "添加品牌";
       },
       /** 关联分类操作 */
-      handleRelation(row) {
+      handleRelation(brandId) {
+        console.log("brandId =", brandId);
         this.catelogDialogVisible = true;
+        this.brandId = brandId;
+        this.getCateRelationList();
       },
       /** 修改按钮操作 */
       handleUpdate(row) {
@@ -371,11 +382,35 @@
           ...this.queryParams
         }, `brand_${new Date().getTime()}.xlsx`)
       },
+      getCateRelationList() {
+        listBrandRelation(this.brandId).then(response => {
+          console.log("cateRelationTableData =", response);
+          this.cateRelationTableData = response.rows;
+        });
+      },
 
       addCatelogSelect() {
-        
+        this.popCatelogSelectVisible = false;
+        this.brandRelationForm.brandId = this.brandId;
+        this.brandRelationForm.catelogId = this.catelogPath[this.catelogPath.length-1];
+        addBrandRelation(this.brandRelationForm).then(response => {
+          this.getCateRelationList();
+        });
+      },
+
+      deleteCateRelationHandle(id, brandId) {
+        deleteBrandRelation(id).then(response => {
+          this.getCateRelationList();
+        });
       }
+
     }
   };
   </script>
+
+  <style>
+  input[aria-hidden=true] {
+    display: none !important;
+  }
+  </style>
   

@@ -26,9 +26,9 @@ public class PmsCategoryBrandRelationServiceImpl implements IPmsCategoryBrandRel
      * @return 品牌分类关联
      */
     @Override
-    public PmsCategoryBrandRelation selectPmsCategoryBrandRelationById(Long id)
+    public List<PmsCategoryBrandRelation> selectPmsCategoryBrandRelationById(Long brandId)
     {
-        return pmsCategoryBrandRelationMapper.selectPmsCategoryBrandRelationById(id);
+        return pmsCategoryBrandRelationMapper.selectPmsCategoryBrandRelationById(brandId);
     }
 
     /**
@@ -89,5 +89,27 @@ public class PmsCategoryBrandRelationServiceImpl implements IPmsCategoryBrandRel
     public int deletePmsCategoryBrandRelationById(Long id)
     {
         return pmsCategoryBrandRelationMapper.deletePmsCategoryBrandRelationById(id);
+    }
+
+    @Override
+    public void updateBrand(Long brandId, String name) {
+        PmsCategoryBrandRelation pmsCategoryBrandRelation = new PmsCategoryBrandRelation();
+        pmsCategoryBrandRelation.setBrandId(brandId);
+        List<PmsCategoryBrandRelation> list = pmsCategoryBrandRelationMapper.selectPmsCategoryBrandRelationList(pmsCategoryBrandRelation);
+        list.forEach(item -> {
+            item.setBrandName(name);
+            pmsCategoryBrandRelationMapper.updatePmsCategoryBrandRelation(item);
+        });
+    }
+
+    @Override
+    public void updateCategory(Long catId, String name) {
+        PmsCategoryBrandRelation pmsCategoryBrandRelation = new PmsCategoryBrandRelation();
+        pmsCategoryBrandRelation.setCatelogId(catId);
+        List<PmsCategoryBrandRelation> list = pmsCategoryBrandRelationMapper.selectPmsCategoryBrandRelationList(pmsCategoryBrandRelation);
+        list.forEach(item -> {
+            item.setCatelogName(name);
+            pmsCategoryBrandRelationMapper.updatePmsCategoryBrandRelation(item);
+        });
     }
 }

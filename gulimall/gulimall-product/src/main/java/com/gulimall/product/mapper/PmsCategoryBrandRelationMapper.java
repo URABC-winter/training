@@ -17,7 +17,7 @@ public interface PmsCategoryBrandRelationMapper
      * @param id 品牌分类关联主键
      * @return 品牌分类关联
      */
-    public PmsCategoryBrandRelation selectPmsCategoryBrandRelationById(Long id);
+    public List<PmsCategoryBrandRelation> selectPmsCategoryBrandRelationById(Long id);
 
     /**
      * 查询品牌分类关联列表

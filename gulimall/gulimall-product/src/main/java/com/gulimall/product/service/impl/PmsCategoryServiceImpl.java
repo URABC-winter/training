@@ -3,6 +3,7 @@ package com.gulimall.product.service.impl;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.gulimall.product.service.IPmsCategoryBrandRelationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.gulimall.product.mapper.PmsCategoryMapper;
@@ -20,6 +21,9 @@ public class PmsCategoryServiceImpl implements IPmsCategoryService
 {
     @Autowired
     private PmsCategoryMapper pmsCategoryMapper;
+
+    @Autowired
+    private IPmsCategoryBrandRelationService pmsCategoryBrandRelationService;
 
     /**
      * 查询商品三级分类
@@ -112,6 +116,7 @@ public class PmsCategoryServiceImpl implements IPmsCategoryService
 
     @Override
     public int updatePmsCategoryList(List<PmsCategory> pmsCategory) {
+        pmsCategoryBrandRelationService.updateCategory(pmsCategory.get(0).getCatId(),pmsCategory.get(0).getName());
         return pmsCategoryMapper.updatePmsCategoryList(pmsCategory);
     }
 

@@ -2,16 +2,14 @@ package com.gulimall.product.controller;
 
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
+
+import com.gulimall.product.domain.PmsBrand;
+import com.gulimall.product.domain.PmsCategory;
+import com.gulimall.product.service.IPmsBrandService;
+import com.gulimall.product.service.IPmsCategoryService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import com.gulimall.common.annotation.Log;
 import com.gulimall.common.core.controller.BaseController;
 import com.gulimall.common.core.domain.AjaxResult;
@@ -33,6 +31,10 @@ public class PmsCategoryBrandRelationController extends BaseController
 {
     @Autowired
     private IPmsCategoryBrandRelationService pmsCategoryBrandRelationService;
+    @Autowired
+    private IPmsBrandService pmsBrandService;
+    @Autowired
+    private IPmsCategoryService pmsCategoryService;
 
     /**
      * 查询品牌分类关联列表
@@ -40,8 +42,18 @@ public class PmsCategoryBrandRelationController extends BaseController
     @GetMapping("/list")
     public TableDataInfo list(PmsCategoryBrandRelation pmsCategoryBrandRelation)
     {
+        System.out.println("brandId =" + pmsCategoryBrandRelation.getBrandId());
         startPage();
         List<PmsCategoryBrandRelation> list = pmsCategoryBrandRelationService.selectPmsCategoryBrandRelationList(pmsCategoryBrandRelation);
+        return getDataTable(list);
+    }
+
+    @GetMapping("/listById/{brandId}")
+    public TableDataInfo listById(@PathVariable("brandId") Long brandId)
+    {
+        System.out.println("brandId =" + brandId);
+        startPage();
+        List<PmsCategoryBrandRelation> list = pmsCategoryBrandRelationService.selectPmsCategoryBrandRelationById(brandId);
         return getDataTable(list);
     }
 
@@ -73,6 +85,10 @@ public class PmsCategoryBrandRelationController extends BaseController
     @PostMapping
     public AjaxResult add(@RequestBody PmsCategoryBrandRelation pmsCategoryBrandRelation)
     {
+        PmsCategory pmsCategory = pmsCategoryService.selectPmsCategoryByCatId(pmsCategoryBrandRelation.getCatelogId());
+        PmsBrand pmsBrand = pmsBrandService.selectPmsBrandByBrandId(pmsCategoryBrandRelation.getBrandId());
+        pmsCategoryBrandRelation.setBrandName(pmsBrand.getName());
+        pmsCategoryBrandRelation.setCatelogName(pmsCategory.getName());
         return toAjax(pmsCategoryBrandRelationService.insertPmsCategoryBrandRelation(pmsCategoryBrandRelation));
     }
 

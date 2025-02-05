@@ -17,7 +17,7 @@ public interface IPmsCategoryBrandRelationService
      * @param id 品牌分类关联主键
      * @return 品牌分类关联
      */
-    public PmsCategoryBrandRelation selectPmsCategoryBrandRelationById(Long id);
+    public List<PmsCategoryBrandRelation> selectPmsCategoryBrandRelationById(Long brandId);
 
     /**
      * 查询品牌分类关联列表
@@ -58,4 +58,8 @@ public interface IPmsCategoryBrandRelationService
      * @return 结果
      */
     public int deletePmsCategoryBrandRelationById(Long id);
+
+    public void updateBrand(Long brandId, String name);
+
+    public void updateCategory(Long catId, String name);
 }
