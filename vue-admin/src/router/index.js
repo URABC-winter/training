@@ -141,12 +141,24 @@ export const routes = [{
     }
 ]
 
+//箭头函数 创建router实例
 const createRouter = () => new Router({
     // mode: 'history', // require service support
+    //mode: 路由模式，默认hash模式（路由地址）
     mode: 'history',
+    //滚动条跳转到新页面顶部
     scrollBehavior: () => ({ y: 0 }),
+    //路由规则配置项
     routes: routes
 })
+
+// function createRouter() {
+//     return new Router ({
+//         mode: 'history',
+//         scrollBehavior: () => ({ y: 0 }),
+//         routes: routes
+//     })
+// }
 
 const router = createRouter()
 
